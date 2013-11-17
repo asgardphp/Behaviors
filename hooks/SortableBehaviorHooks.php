@@ -46,11 +46,12 @@ class SortableBehaviorHooks extends \Coxis\Hook\HooksContainer {
 	}
 	
 	/**
-	@Hook('behaviors_coxisadmin_sortable')
+	@Hook('coxisadmin')
 	*/
-	public function behaviors_coxisadmin_sortableAction($admin_controller) {
-		$admin_controller .= 'Controller';
+	public function coxisadminAction($admin_controller) {
 		$modelName = $admin_controller::getModel();
+		if(!$modelName::getDefinition()->hasBehavior('sortable'))
+			return;
 		
 		try {
 			$admin_controller::addHook(array(

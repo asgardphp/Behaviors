@@ -21,12 +21,13 @@ class PublishBehaviorHooks extends \Coxis\Hook\HooksContainer {
 	}
 	
 	/**
-	@Hook('behaviors_coxisadmin_publish')
+	@Hook('coxisadmin')
 	*/
-	public function behaviors_coxisadmin_publishAction($admin_controller) {
-		$admin_controller .= 'Controller';
+	public function coxisadminAction($admin_controller) {
 		$modelName = $admin_controller::getModel();
-		
+		if(!$modelName::getDefinition()->hasBehavior('publish'))
+			return;
+
 		try {
 			$admin_controller::addHook(array(
 				'route'			=>	':id/publish',
