@@ -4,9 +4,9 @@ namespace Coxis\Behaviors\Controllers;
 class PublishBehaviorController extends \Coxis\Core\Controller {
 	public function publishAction($request) {
 		$controller = $request->parentController.'Controller';
-		$modelName = $controller::getModel();
-		$model = $modelName::load($request['id']);
-		$model->save(array('published'=>!$model->published));
+		$entityName = $controller::getEntity();
+		$entity = $entityName::load($request['id']);
+		$entity->save(array('published'=>!$entity->published));
 		return \Response::back();
 	}
 }

@@ -3,61 +3,61 @@ namespace Coxis\Behaviors\Controllers;
 
 class SortableBehaviorController extends \Coxis\Core\Controller {
 	public function promoteAction($request) {
-		$controller = $request->parentController.'Controller';
-		$modelName = $controller::getModel();
-		$model = $modelName::load($request['id']);
+		$controller = $request->parentController;
+		$entityName = $controller::getEntity();
+		$entity = $entityName::load($request['id']);
 
-		static::reset($modelName);
+		static::reset($entityName);
 		
 		try {
-			$separate_by = $model->getDefinition()->meta('separate_by');
+			$separate_by = $entity->getDefinition()->meta('separate_by');
 			if($separate_by)
-				$over_model = $modelName::where(array('position < ?'=>$model->position, $separate_by=>$model->$separate_by))->orderBy('position DESC')->first();
+				$over_entity = $entityName::where(array('position < ?'=>$entity->position, $separate_by=>$entity->$separate_by))->orderBy('position DESC')->first();
 			else
-				$over_model = $modelName::where(array('position < ?'=>$model->position))->orderBy('position DESC')->first();
+				$over_entity = $entityName::where(array('position < ?'=>$entity->position))->orderBy('position DESC')->first();
 			
-			$old = $model->position;
-			$model->position = $over_model->position;
-			$over_model->position = $old;
-			$model->save(null, true);
-			$over_model->save(null, true);
+			$old = $entity->position;
+			$entity->position = $over_entity->position;
+			$over_entity->position = $old;
+			$entity->save(null, true);
+			$over_entity->save(null, true);
 			\Flash::addSuccess(__('Ordre modifié avec succès.'));
 		} catch(\Exception $e) {}
-		
-		return \Response::back();
+
+		return $this->response->back();
 	}
 	
 	public function demoteAction($request) {
-		$controller = $request->parentController.'Controller';
-		$modelName = $controller::getModel();
-		$model = $modelName::load($request['id']);
-		static::reset($modelName);
+		$controller = $request->parentController;
+		$entityName = $controller::getEntity();
+		$entity = $entityName::load($request['id']);
+		static::reset($entityName);
 		
 		try {
-			$separate_by = $model->getDefinition()->meta('separate_by');
+			$separate_by = $entity->getDefinition()->meta('separate_by');
 			if($separate_by)
-				$below_model = $modelName::where(array('position > ?'=>$model->position, $separate_by=>$model->$separate_by))->orderBy('position ASC')->first();
+				$below_entity = $entityName::where(array('position > ?'=>$entity->position, $separate_by=>$entity->$separate_by))->orderBy('position ASC')->first();
 			else
-				$below_model = $modelName::where(array('position > ?'=>$model->position))->orderBy('position ASC')->first();
+				$below_entity = $entityName::where(array('position > ?'=>$entity->position))->orderBy('position ASC')->first();
 			
-			$old = $model->position;
-			$model->position = $below_model->position;
-			$below_model->position = $old;
-			$model->save(null, true);
-			$below_model->save(null, true);
+			$old = $entity->position;
+			$entity->position = $below_entity->position;
+			$below_entity->position = $old;
+			$entity->save(null, true);
+			$below_entity->save(null, true);
 			\Flash::addSuccess(__('Ordre modifié avec succès.'));
 		} catch(\Exception $e) {}
 		
 		return \Response::back();
 	}
 	
-	public static function reset($modelName) {
-		$all = $modelName::orderBy('position ASC')->get();
+	public static function reset($entityName) {
+		$all = $entityName::orderBy('position ASC')->get();
 		
 		#reset positions
-		foreach($all as $i=>$one_model) {
-			$one_model->position = $i;
-			$one_model->save(null, true);
+		foreach($all as $i=>$one_entity) {
+			$one_entity->position = $i;
+			$one_entity->save(null, true);
 		}
 	}
 }
