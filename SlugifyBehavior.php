@@ -3,22 +3,17 @@ namespace Coxis\Behaviors;
 
 class SlugifyBehavior implements \Coxis\Core\Behavior {
 	public static function load($entityDefinition, $params=null) {
-		$entityDefinition->addProperty('slug', array('type' => 'text', 'required' => false, 'editable'=>false));
+		$slug_from = isset($params) ? $params:null;
 
-		$entityDefinition->hook('behaviors_presave', function($chain, $entity) {
-			if($entity->isNew())
-				$entity->slug = \Coxis\Utils\Tools::slugify($entity);
-			else {
-				$inc = 1;
-				do {
-					$entity->slug = \Coxis\Utils\Tools::slugify($entity).($inc < 2 ? '':'-'.$inc);
-					$inc++;
-				}
-				while($entity::where(array(
-					'id != ?' => $entity->id,
-					'slug' => $entity->slug,
-				))->count());
-			}
+		$entityDefinition->addProperty('slug', array('type' => 'text', 'required' => false));
+
+		$entityDefinition->addMethod('slug', function($entity) use($slug_from) {
+			if($entity->slug)
+				return $entity->slug;
+			if($slug_from !== null && $entity->hasProperty($slug_from))
+				return \Coxis\Utils\Tools::slugify($entity->{$slug_from});
+			elseif(method_exists($entity, '__toString'))
+				return \Coxis\Utils\Tools::slugify($entity->__toString());
 		});
 	}
 }

@@ -9,9 +9,9 @@ class MetasBehavior implements \Coxis\Core\Behavior {
 
 		#$article->showMetas()
 		$entityDefinition->addMethod('showMetas', function($entity) {
-			HTML::setTitle($entity->meta_title!='' ? html_entity_decode($entity->meta_title):html_entity_decode($entity));
-			HTML::setKeywords($entity->meta_keywords);
-			HTML::setDescription($entity->meta_description);
+			\Coxis\Core\App::get('html')->setTitle($entity->meta_title!='' ? html_entity_decode($entity->meta_title):html_entity_decode($entity));
+			\Coxis\Core\App::get('html')->setKeywords($entity->meta_keywords);
+			\Coxis\Core\App::get('html')->setDescription($entity->meta_description);
 		});
 	}
 }

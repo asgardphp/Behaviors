@@ -7,6 +7,6 @@ class PublishBehaviorController extends \Coxis\Core\Controller {
 		$entityName = $controller::getEntity();
 		$entity = $entityName::load($request['id']);
 		$entity->save(array('published'=>!$entity->published));
-		return \Response::back();
+		return \Coxis\Core\App::get('response')->back();
 	}
 }

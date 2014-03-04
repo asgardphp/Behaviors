@@ -7,11 +7,11 @@ class PublishBehavior implements \Coxis\Core\Behavior {
 
 		$entityDefinition->addProperty('published', array('type'=>'boolean', 'default'=>true));
 
-		#Article::load(2)
+		#Article::published()
 		$entityDefinition->addStaticMethod('published', function() use($entityName) {
 			return $entityName::orm()->where(array('published'=>1));
 		});
-		#Article::load(2)
+		#Article::loadPublished(2)
 		$entityDefinition->addStaticMethod('loadPublished', function($id) use($entityName) {
 			return $entityName::published()->where(array('id'=>$id))->first();
 		});
@@ -28,7 +28,7 @@ class PublishBehavior implements \Coxis\Core\Behavior {
 		});
 
 		$entityDefinition->hook('coxisadmin_actions', function($chain, $entity) use($entityName) {
-				return '<a href="'.\URL::url_for('coxis_'.$entityName.'_publish', array('id' => $entity->id), false).'">'.($entity->published ? __('Unpublish'):__('Publish')).'</a> | ';
+				return '<a href="'.\Coxis\Core\App::get('url')->url_for('coxis_'.$entityName.'_publish', array('id' => $entity->id), false).'">'.($entity->published ? __('Unpublish'):__('Publish')).'</a> | ';
 		});
 
 		$entityDefinition->hook('coxisadmin_globalactions', function($chain, &$actions) use($entityName) {

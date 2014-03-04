@@ -74,6 +74,6 @@ class SortableBehavior implements \Coxis\Core\Behavior {
 	}
 
 	public static function sortable($chain, $entity) {
-		return '<a href="'.\URL::url_for('coxis_'.get_class($entity).'_promote', array('id' => $entity->id), false).'">'.__('Promote').'</a> | <a href="'.\URL::url_for('coxis_'.get_class($entity).'_demote', array('id' => $entity->id), false).'">'.__('Demote').'</a> | ';
+		return '<a href="'.\Coxis\Core\App::get('url')->url_for('coxis_'.get_class($entity).'_promote', array('id' => $entity->id), false).'">'.__('Promote').'</a> | <a href="'.\Coxis\Core\App::get('url')->url_for('coxis_'.get_class($entity).'_demote', array('id' => $entity->id), false).'">'.__('Demote').'</a> | ';
 	}
 }

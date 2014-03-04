@@ -21,7 +21,7 @@ class SortableBehaviorController extends \Coxis\Core\Controller {
 			$over_entity->position = $old;
 			$entity->save(null, true);
 			$over_entity->save(null, true);
-			\Flash::addSuccess(__('Ordre modifié avec succès.'));
+			\Coxis\Core\App::get('flash')->addSuccess(__('Ordre modifié avec succès.'));
 		} catch(\Exception $e) {}
 
 		return $this->response->back();
@@ -45,10 +45,10 @@ class SortableBehaviorController extends \Coxis\Core\Controller {
 			$below_entity->position = $old;
 			$entity->save(null, true);
 			$below_entity->save(null, true);
-			\Flash::addSuccess(__('Ordre modifié avec succès.'));
+			\Coxis\Core\App::get('flash')->addSuccess(__('Ordre modifié avec succès.'));
 		} catch(\Exception $e) {}
 		
-		return \Response::back();
+		return \Coxis\Core\App::get('response')->back();
 	}
 	
 	public static function reset($entityName) {
