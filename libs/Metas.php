@@ -1,5 +1,5 @@
 <?php
-namespace Coxis\Behaviors\Libs;
+namespace Asgard\Behaviors\Libs;
 
 class Metas {
 	public static function set($entity) {

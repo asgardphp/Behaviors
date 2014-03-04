@@ -1,7 +1,7 @@
 <?php
-namespace Coxis\Behaviors;
+namespace Asgard\Behaviors;
 
-class SortableBehavior implements \Coxis\Core\Behavior {
+class SortableBehavior implements \Asgard\Core\Behavior {
 	public static function load($entityDefinition, $params=null) {
 		$entityDefinition->meta['order_by'] = 'position ASC';
 		$entityDefinition->addProperty('position', array('type' => 'integer', 'default'=>0, 'required' => false, 'editable' => false));
@@ -41,23 +41,23 @@ class SortableBehavior implements \Coxis\Core\Behavior {
 			return false;
 		});
 
-		$entityDefinition->hook('coxisadmin', function($chain, $admin_controller) use($entityDefinition) {
+		$entityDefinition->hook('asgardadmin', function($chain, $admin_controller) use($entityDefinition) {
 			$entityName = $admin_controller::getEntity();
 			
 			try {
 				$admin_controller::addHook(array(
 					'route'			=>	':id/promote',
-					'name'			=>	'coxis_'.$entityName.'_promote',
-					'controller'	=>	'Coxis\Behaviors\Controllers\SortableBehaviorController',
+					'name'			=>	'asgard_'.$entityName.'_promote',
+					'controller'	=>	'Asgard\Behaviors\Controllers\SortableBehaviorController',
 					'action'			=>	'promote'
 				));
 				$admin_controller::addHook(array(
 					'route'			=>	':id/demote',
-					'name'			=>	'coxis_'.$entityName.'_demote',
-					'controller'	=>	'Coxis\Behaviors\Controllers\SortableBehaviorController',
+					'name'			=>	'asgard_'.$entityName.'_demote',
+					'controller'	=>	'Asgard\Behaviors\Controllers\SortableBehaviorController',
 					'action'			=>	'demote'
 				));
-				$entityDefinition->hook('coxis_actions', array('\Coxis\Behaviors\SortableBehavior', 'sortable'));
+				$entityDefinition->hook('asgard_actions', array('\Asgard\Behaviors\SortableBehavior', 'sortable'));
 			} catch(\Exception $e) {}#if the admincontroller does not exist for this Entity
 		});
 
@@ -74,6 +74,6 @@ class SortableBehavior implements \Coxis\Core\Behavior {
 	}
 
 	public static function sortable($chain, $entity) {
-		return '<a href="'.\Coxis\Core\App::get('url')->url_for('coxis_'.get_class($entity).'_promote', array('id' => $entity->id), false).'">'.__('Promote').'</a> | <a href="'.\Coxis\Core\App::get('url')->url_for('coxis_'.get_class($entity).'_demote', array('id' => $entity->id), false).'">'.__('Demote').'</a> | ';
+		return '<a href="'.\Asgard\Core\App::get('url')->url_for('asgard_'.get_class($entity).'_promote', array('id' => $entity->id), false).'">'.__('Promote').'</a> | <a href="'.\Asgard\Core\App::get('url')->url_for('asgard_'.get_class($entity).'_demote', array('id' => $entity->id), false).'">'.__('Demote').'</a> | ';
 	}
 }

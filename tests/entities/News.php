@@ -1,16 +1,16 @@
 <?php
-namespace Coxis\Behaviors\Tests\Entities;
+namespace Asgard\Behaviors\Tests\Entities;
 
-class News extends \Coxis\Core\Entity {
+class News extends \Asgard\Core\Entity {
 	public static $properties = array(
 		'title',
 		'content',
 	);
 
 	public static $behaviors = array(
-		'Coxis\Behaviors\PageBehavior',
-		'Coxis\Behaviors\SlugifyBehavior' => 'title',
-		'Coxis\Behaviors\PublishBehavior',
+		'Asgard\Behaviors\PageBehavior',
+		'Asgard\Behaviors\SlugifyBehavior' => 'title',
+		'Asgard\Behaviors\PublishBehavior',
 	);
 
 	public function __toString() {

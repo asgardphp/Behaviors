@@ -1,12 +1,12 @@
 <?php
-namespace Coxis\Behaviors\Controllers;
+namespace Asgard\Behaviors\Controllers;
 
-class PublishBehaviorController extends \Coxis\Core\Controller {
+class PublishBehaviorController extends \Asgard\Core\Controller {
 	public function publishAction($request) {
 		$controller = $request->parentController.'Controller';
 		$entityName = $controller::getEntity();
 		$entity = $entityName::load($request['id']);
 		$entity->save(array('published'=>!$entity->published));
-		return \Coxis\Core\App::get('response')->back();
+		return \Asgard\Core\App::get('response')->back();
 	}
 }

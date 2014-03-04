@@ -1,7 +1,7 @@
 <?php
-namespace Coxis\Behaviors\Controllers;
+namespace Asgard\Behaviors\Controllers;
 
-class SortableBehaviorController extends \Coxis\Core\Controller {
+class SortableBehaviorController extends \Asgard\Core\Controller {
 	public function promoteAction($request) {
 		$controller = $request->parentController;
 		$entityName = $controller::getEntity();
@@ -21,7 +21,7 @@ class SortableBehaviorController extends \Coxis\Core\Controller {
 			$over_entity->position = $old;
 			$entity->save(null, true);
 			$over_entity->save(null, true);
-			\Coxis\Core\App::get('flash')->addSuccess(__('Ordre modifié avec succès.'));
+			\Asgard\Core\App::get('flash')->addSuccess(__('Ordre modifié avec succès.'));
 		} catch(\Exception $e) {}
 
 		return $this->response->back();
@@ -45,10 +45,10 @@ class SortableBehaviorController extends \Coxis\Core\Controller {
 			$below_entity->position = $old;
 			$entity->save(null, true);
 			$below_entity->save(null, true);
-			\Coxis\Core\App::get('flash')->addSuccess(__('Ordre modifié avec succès.'));
+			\Asgard\Core\App::get('flash')->addSuccess(__('Ordre modifié avec succès.'));
 		} catch(\Exception $e) {}
 		
-		return \Coxis\Core\App::get('response')->back();
+		return \Asgard\Core\App::get('response')->back();
 	}
 	
 	public static function reset($entityName) {
