@@ -66,8 +66,8 @@ class BehaviorsTest extends PHPUnit_Framework_TestCase {
 		$news = new Asgard\Behaviors\Tests\Entities\News(array(
 			'title' => 'Test Title',
 			'content' => 'Test Content',
-			'created_at' => '09/09/09 09:09:09',
-			'updated_at' => '09/09/09 09:09:09',
+			'created_at' => '2009-09-09 09:09:09',
+			'updated_at' => '2009-09-09 09:09:09',
 		));
 		$this->assertEquals('09/09/2009 09:09:09', $news->updated_at->format('d/m/Y H:i:s'));
 		$news->title = 'test';
@@ -76,7 +76,7 @@ class BehaviorsTest extends PHPUnit_Framework_TestCase {
 
 	#publish
 	public function test5() {
-		// \DB::import(realpath(dirname(__FILE__).'/sql/test5.sql'));
+		// \DB::import(realpath(__dir__.'/sql/test5.sql'));
 
 		// $this->assertTrue(Asgard\Behaviors\Tests\Entities\News::hasProperty('published'));
 		// $this->assertEquals(1, Asgard\Behaviors\Tests\Entities\News::count());
