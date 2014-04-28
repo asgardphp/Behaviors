@@ -61,7 +61,7 @@ class SortableBehavior implements \Asgard\Core\Behavior {
 			} catch(\Exception $e) {}#if the admincontroller does not exist for this Entity
 		});
 
-		$entityDefinition->hook('behaviors_presave', function($chain, $entity) {
+		$entityDefinition->hook('presave', function($chain, $entity) {
 			if($entity->isNew()) {
 				try {
 					$last = $entity::orderBy('position ASC')->first();

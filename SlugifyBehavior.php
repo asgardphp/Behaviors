@@ -15,5 +15,21 @@ class SlugifyBehavior implements \Asgard\Core\Behavior {
 			elseif(method_exists($entity, '__toString'))
 				return \Asgard\Utils\Tools::slugify($entity->__toString());
 		});
+
+		$entityDefinition->hook('presave', function($chain, $entity) {
+			if($entity->isNew())
+				$entity->slug = \Asgard\Utils\Tools::slugify($entity);
+			else {
+				$inc = 1;
+				do {
+					$entity->slug = \Asgard\Utils\Tools::slugify($entity).($inc < 2 ? '':'-'.$inc);
+					$inc++;
+				}
+				while($entity::where(array(
+					'id != ?' => $entity->id,
+					'slug' => $entity->slug,
+				))->count());
+			}
+		});
 	}
 }
