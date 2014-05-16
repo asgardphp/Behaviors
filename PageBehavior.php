@@ -1,11 +1,9 @@
 <?php
 namespace Asgard\Behaviors;
 
-class PageBehavior implements \Asgard\Core\Behavior {
-	public static function load($entityDefinition, $params=null) {
-		if(!isset($entityDefinition->behaviors['Asgard\Behaviors\MetasBehavior']))
-			$entityDefinition->behaviors['Asgard\Behaviors\MetasBehavior'] = true;
-		if(!isset($entityDefinition->behaviors['Asgard\Behaviors\SlugifyBehavior']))
-			$entityDefinition->behaviors['Asgard\Behaviors\SlugifyBehavior'] = true;
+class PageBehavior extends \Asgard\Entity\Behavior {
+	public function load(\Asgard\Entity\EntityDefinition $definition) {
+		$definition->addBehavior(new \Asgard\Behaviors\MetasBehavior);
+		$definition->addBehavior(new \Asgard\Behaviors\SlugifyBehavior);
 	}
 }

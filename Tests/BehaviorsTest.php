@@ -1,28 +1,28 @@
 <?php
 namespace Asgard\Behaviors\Tests;
 
+require_once _VENDOR_DIR_.'autoload.php';
+
 class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 	public static function setUpBeforeClass() {
 		if(!defined('_ENV_'))
 			define('_ENV_', 'test');
-		require_once(_VENDOR_DIR_.'autoload.php');
 
 		\Asgard\Core\App::instance(true)->config->set('bundles', array(
-			__DIR__.'/..',
+			new \Asgard\Entity\Bundle,
 		))
 		->set('bundlesdirs', array());
-		\Asgard\Core\App::loadDefaultApp();
+		\Asgard\Core\App::loadDefaultApp(false);
 
-		\Asgard\Core\App::get('hook')->hook('behaviors_pre_load', function($chain, $entityDefinition) {
-			if(!isset($entityDefinition->behaviors['Asgard\Behaviors\TimestampsBehavior']))
-				$entityDefinition->behaviors['Asgard\Behaviors\TimestampsBehavior'] = true;
+		\Asgard\Core\App::get('hook')->hook('behaviors_pre_load', function($chain, $definition) {
+			$definition->behaviors[] = new \Asgard\Behaviors\TimestampsBehavior;
+			$definition->behaviors[] = new SaveBehavior;
 		});
 	}
 	
 	#page
 	public function test1() {
-		$this->assertTrue(\Asgard\Behaviors\Tests\Entities\News::getDefinition()->behaviors['Asgard\Behaviors\MetasBehavior']);
-		// $this->assertTrue(Asgard\Behaviors\Tests\Entities\News::getDefinition()->behaviors['Asgard\Behaviors\SlugifyBehavior']);
+		$this->assertTrue(\Asgard\Behaviors\Tests\Entities\News::getDefinition()->hasBehavior('Asgard\Behaviors\MetasBehavior'));
 	}
 
 	#metas
@@ -78,6 +78,7 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 		));
 		$this->assertEquals('09/09/2009 09:09:09', $news->updated_at->format('d/m/Y H:i:s'));
 		$news->title = 'test';
+		$news->save();
 		$this->assertEquals(date('d/m/Y H:i:s'), $news->updated_at->format('d/m/Y H:i:s'));
 	}
 
@@ -95,11 +96,8 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 	}
 }
 
-// class NullClass {
-// 	public function __call($name, $args) {return $this;}
-// 	public static function __callStatic($name, $args) {}
-// 	public function __get($name) {}
-// 	public function __set($name, $value) {}
-// 	public function __isset($name) {}
-// 	public function __unset($name) {}
-// }
+class SaveBehavior extends \Asgard\Entity\Behavior {
+	public function call_save($entity) {
+		$entity::trigger('save', array($entity));
+	}
+}

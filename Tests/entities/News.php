@@ -1,17 +1,19 @@
 <?php
 namespace Asgard\Behaviors\Tests\Entities;
 
-class News extends \Asgard\Core\Entity {
-	public static $properties = array(
-		'title',
-		'content',
-	);
+class News extends \Asgard\Entity\Entity {
+	public static function definition(\Asgard\Entity\EntityDefinition $definition) {
+		$definition->properties = array(
+			'title',
+			'content'
+		);
 
-	public static $behaviors = array(
-		'Asgard\Behaviors\PageBehavior',
-		'Asgard\Behaviors\SlugifyBehavior' => 'title',
-		'Asgard\Behaviors\PublishBehavior',
-	);
+		$definition->behaviors = array(
+			new \Asgard\Behaviors\PageBehavior,
+			new \Asgard\Behaviors\SlugifyBehavior('title'),
+			new \Asgard\Behaviors\PublishBehavior
+		);
+	}
 
 	public function __toString() {
 		return $this->title;

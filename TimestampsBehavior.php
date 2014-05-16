@@ -1,17 +1,12 @@
 <?php
 namespace Asgard\Behaviors;
 
-class TimestampsBehavior implements \Asgard\Core\Behavior {
-	public static function load($entityDefinition, $params=null) {
-		// $entityDefinition->addProperty('created_at', array('type' => 'datetime', 'required' => false, 'editable' => false, 'default' => function() { return new \Asgard\Utils\Datetime(); }));
-		// $entityDefinition->addProperty('updated_at', array('type' => 'datetime', 'required' => false, 'editable' => false, 'default' => function() { return new \Asgard\Utils\Datetime(); }));
-		$entityDefinition->addProperty('created_at', array('type' => 'datetime', 'required' => false, 'editable' => false, 'default' => function() { return \Carbon\Carbon::now(); }));
-		$entityDefinition->addProperty('updated_at', array('type' => 'datetime', 'required' => false, 'editable' => false, 'default' => function() { return \Carbon\Carbon::now(); }));
+class TimestampsBehavior extends \Asgard\Entity\Behavior {
+	public function load(\Asgard\Entity\EntityDefinition $definition) {
+		$definition->addProperty('created_at', array('type' => 'datetime', 'required' => false, 'editable' => false, 'default' => function() { return \Carbon\Carbon::now(); }));
+		$definition->addProperty('updated_at', array('type' => 'datetime', 'required' => false, 'editable' => false, 'default' => function() { return \Carbon\Carbon::now(); }));
 
-		$entityDefinition->hook('set', function($chain, $entity, $name, $value, $lang) {
-			if($name == 'updated_at' || is_array($name) && in_array('updated_at', array_keys($name)))
-				return;
-			// $entity->updated_at = new \Asgard\Utils\Datetime();
+		$definition->hook('save', function($chain, \Asgard\Entity\Entity $entity) {
 			$entity->updated_at = \Carbon\Carbon::now();
 		});
 	}
