@@ -2,13 +2,13 @@
 namespace Asgard\Behaviors\Controllers;
 
 /**
-@Prefix('admin/sortable/:entityAlias/:id')
-*/
-class SortableController extends \App\Admin\Libs\Controller\AdminParentController {
+ * @Prefix("admin/sortable/:entityAlias/:id")
+ */
+class SortableController extends \Admin\Libs\Controller\AdminParentController {
 	public function before(\Asgard\Http\Request $request) {
 		$this->layout = false;
 		$entityAlias = $request['entityAlias'];
-		$this->entityClass = $entityClass = \Asgard\Core\App::get('adminManager')->getClass($entityAlias);
+		$this->entityClass = $entityClass = \Asgard\Container\Container::get('adminManager')->getClass($entityAlias);
 		if(!($this->entity = $entityClass::load($request['id'])))
 			$this->forward404();
 
@@ -16,8 +16,8 @@ class SortableController extends \App\Admin\Libs\Controller\AdminParentControlle
 	}
 
 	/**
-	@Route('promote')
-	*/
+	 * @Route("promote")
+	 */
 	public function promoteAction(\Asgard\Http\Request $request) {
 		$entityClass = $this->entityClass;
 		$entity = $this->entity;
@@ -36,15 +36,15 @@ class SortableController extends \App\Admin\Libs\Controller\AdminParentControlle
 			$over_entity->position = $old;
 			$entity->save(null, true);
 			$over_entity->save(null, true);
-			\Asgard\Core\App::get('flash')->addSuccess(__('Order modified with success.'));
+			\Asgard\Container\Container::get('flash')->addSuccess(__('Order modified with success.'));
 		} catch(\Exception $e) {d($e);}
 
 		return $this->response->back();
 	}
 
 	/**
-	@Route('demote')
-	*/
+	 * @Route("demote")
+	 */
 	public function demoteAction(\Asgard\Http\Request $request) {
 		$entityClass = $this->entityClass;
 		$entity = $this->entity;
@@ -62,7 +62,7 @@ class SortableController extends \App\Admin\Libs\Controller\AdminParentControlle
 			$below_entity->position = $old;
 			$entity->save(null, true);
 			$below_entity->save(null, true);
-			\Asgard\Core\App::get('flash')->addSuccess(__('Order modified with success.'));
+			\Asgard\Container\Container::get('flash')->addSuccess(__('Order modified with success.'));
 		} catch(\Exception $e) {}
 		
 		return $this->response->back();

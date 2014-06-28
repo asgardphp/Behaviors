@@ -1,37 +1,61 @@
 <?php
 namespace Asgard\Behaviors\Tests;
 
-require_once _VENDOR_DIR_.'autoload.php';
-
 class BehaviorsTest extends \PHPUnit_Framework_TestCase {
+	protected static $app;
+
 	public static function setUpBeforeClass() {
-		if(!defined('_ENV_'))
-			define('_ENV_', 'test');
+		static::$app = $app = new \Asgard\Container\Container;
+		$app['kernel'] = new \Asgard\Core\Kernel();
+		$app['config'] = new \Asgard\Config\Config;
+		$app['config']->set('locale', 'en');
+		$app['config']->set('locales', array('fr', 'en'));
+		$app['hooks'] = new \Asgard\Hook\HooksManager($app);
+		$app['cache'] = new \Asgard\Cache\NullCache;
+		$app['html'] = new \Asgard\Http\Utils\Html(new \Asgard\Http\Request);
+		$app['rulesregistry'] = new \Asgard\Validation\RulesRegistry;
+		$app['entitiesmanager'] = new \Asgard\Entity\EntitiesManager($app);
+		$app['db'] = new \Asgard\Db\DB(array(
+			'database' => 'asgard',
+			'user' => 'root',
+			'password' => '',
+			'host' => 'localhost'
+		));
+		\Asgard\Entity\Entity::setApp($app);
+		static::$app = $app;
 
-		\Asgard\Core\App::instance(true)->config->set('bundles', array(
-			new \Asgard\Entity\Bundle,
-		))
-		->set('bundlesdirs', array());
-		\Asgard\Core\App::loadDefaultApp(false);
+		$db = new \Asgard\Db\DB(array(
+			'host' => 'localhost',
+			'user' => 'root',
+			'password' => '',
+			'database' => 'asgard',
+		));
+		$schema = new \Asgard\Db\Schema($db);
+		$schema->dropAll();
+		$mm = new \Asgard\Orm\ORMMigrations($app);
+		$mm->autoMigrate('Asgard\Behaviors\Tests\Fixtures\News', new \Asgard\Db\Schema($db));
+		Fixtures\News::create(array('id'=>1, 'title'=>'a', 'content'=>'a', 'published'=>true));
+		Fixtures\News::create(array('id'=>2, 'title'=>'a', 'content'=>'a', 'published'=>true));
+		Fixtures\News::create(array('id'=>3, 'title'=>'a', 'content'=>'a', 'published'=>false));
+	}
 
-		\Asgard\Core\App::get('hook')->hook('behaviors_pre_load', function($chain, $definition) {
-			$definition->behaviors[] = new \Asgard\Behaviors\TimestampsBehavior;
-			$definition->behaviors[] = new SaveBehavior;
-		});
+	protected static function getApp() {
+		return static::$app;
 	}
 	
 	#page
-	public function test1() {
-		$this->assertTrue(\Asgard\Behaviors\Tests\Entities\News::getDefinition()->hasBehavior('Asgard\Behaviors\MetasBehavior'));
+	public function testPage() {
+		$this->assertTrue(Fixtures\News::getDefinition()->hasBehavior('Asgard\Behaviors\MetasBehavior'));
+		$this->assertTrue(Fixtures\News::getDefinition()->hasBehavior('Asgard\Behaviors\SlugifyBehavior'));
 	}
 
 	#metas
-	public function test2() {
-		$this->assertTrue(\Asgard\Behaviors\Tests\Entities\News::hasProperty('meta_title'));
-		$this->assertTrue(\Asgard\Behaviors\Tests\Entities\News::hasProperty('meta_description'));
-		$this->assertTrue(\Asgard\Behaviors\Tests\Entities\News::hasProperty('meta_keywords'));
+	public function testMetas() {
+		$this->assertTrue(Fixtures\News::hasProperty('meta_title'));
+		$this->assertTrue(Fixtures\News::hasProperty('meta_description'));
+		$this->assertTrue(Fixtures\News::hasProperty('meta_keywords'));
 
-		$news = new \Asgard\Behaviors\Tests\Entities\News(array(
+		$news = new Fixtures\News(array(
 			'title' => 'Test',
 			'content' => 'Test',
 			'meta_title' => 'Test Meta Title',
@@ -41,15 +65,15 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 
 		$news->showMetas();
 
-		$this->assertEquals('Test Meta Title', \Asgard\Core\App::instance()->html->getTitle());
-		$this->assertEquals('Test Meta Description', \Asgard\Core\App::instance()->html->getDescription());
-		$this->assertEquals('Test Meta Keywords', \Asgard\Core\App::instance()->html->getKeywords());
+		$this->assertEquals('Test Meta Title', static::getApp()['html']->getTitle());
+		$this->assertEquals('Test Meta Description', static::getApp()['html']->getDescription());
+		$this->assertEquals('Test Meta Keywords', static::getApp()['html']->getKeywords());
 	}
 
 	#slugify
-	public function test3() {
-		$this->assertTrue(\Asgard\Behaviors\Tests\Entities\News::hasProperty('slug'));
-		$news = new \Asgard\Behaviors\Tests\Entities\News(array(
+	public function testSlugify() {
+		$this->assertTrue(Fixtures\News::hasProperty('slug'));
+		$news = new Fixtures\News(array(
 			'title' => 'Test Title',
 			'content' => 'Test Content',
 		));
@@ -59,18 +83,18 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	#timestamps
-	public function test4() {
-		$this->assertTrue(\Asgard\Behaviors\Tests\Entities\News::hasProperty('created_at'));
-		$this->assertTrue(\Asgard\Behaviors\Tests\Entities\News::hasProperty('updated_at'));
+	public function testTimestamps() {
+		$this->assertTrue(Fixtures\News::hasProperty('created_at'));
+		$this->assertTrue(Fixtures\News::hasProperty('updated_at'));
 
-		$news = new \Asgard\Behaviors\Tests\Entities\News(array(
+		$news = new Fixtures\News(array(
 			'title' => 'Test Title',
 			'content' => 'Test Content',
 		));
 		$this->assertEquals(date('d/m/Y H:i:s'), $news->created_at->format('d/m/Y H:i:s'));
 		$this->assertEquals(date('d/m/Y H:i:s'), $news->updated_at->format('d/m/Y H:i:s'));
 
-		$news = new \Asgard\Behaviors\Tests\Entities\News(array(
+		$news = new Fixtures\News(array(
 			'title' => 'Test Title',
 			'content' => 'Test Content',
 			'created_at' => '2009-09-09 09:09:09',
@@ -79,16 +103,18 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('09/09/2009 09:09:09', $news->updated_at->format('d/m/Y H:i:s'));
 		$news->title = 'test';
 		$news->save();
-		$this->assertEquals(date('d/m/Y H:i:s'), $news->updated_at->format('d/m/Y H:i:s'));
+		$this->assertLessThan(2, time()-$news->updated_at->format('U'));
 	}
 
 	#publish
-	public function test5() {
-		// \DB::import(realpath(__dir__.'/sql/test5.sql'));
+	public function testPublish() {
+		$this->assertTrue(Fixtures\News::hasProperty('published'));
 
-		// $this->assertTrue(Asgard\Behaviors\Tests\Entities\News::hasProperty('published'));
-		// $this->assertEquals(1, Asgard\Behaviors\Tests\Entities\News::count());
-		// $this->assertEquals(1, Asgard\Behaviors\Tests\Entities\News::published()->count());
+		$this->assertCount(3, Fixtures\News::published()->get());
+		$this->assertEquals(null, Fixtures\News::loadPublished(3));
+		$this->assertInstanceOf('Asgard\Behaviors\Tests\Fixtures\News', Fixtures\News::loadPublished(2));
+
+		#todo test de l'admin
 	}
 
 	#sortable
@@ -96,8 +122,8 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 	}
 }
 
-class SaveBehavior extends \Asgard\Entity\Behavior {
-	public function call_save($entity) {
-		$entity::trigger('save', array($entity));
-	}
-}
+// class SaveBehavior extends \Asgard\Entity\Behavior {
+// 	public function call_save($entity) {
+// 		$entity::trigger('save', array($entity));
+// 	}
+// }

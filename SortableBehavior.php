@@ -7,7 +7,7 @@ class SortableBehavior extends \Asgard\Entity\Behavior {
 		$definition->addProperty('position', array('type' => 'integer', 'default'=>0, 'required' => false, 'editable' => false));
 
 		$definition->hook('save', function($chain, $entity) {
-			if($entity->isNew()) {
+			if(!isset($entity->position)) {
 				try {
 					$entity->position = $entity::orderBy('position ASC')->first()->position + 1;
 				} catch(\Exception $e) {

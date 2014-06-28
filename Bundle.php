@@ -2,7 +2,9 @@
 namespace Asgard\Behaviors;
 
 class Bundle extends \Asgard\Core\BundleLoader {
-	public function load(\Asgard\Core\BundlesManager $queue) {
-		parent::load($queue);
+	protected function loadControllers() {
+		if(!class_exists('Admin\Libs\Controller\AdminParentController'))
+			return [];
+		return parent::loadControllers();
 	}
 }
