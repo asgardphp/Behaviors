@@ -7,8 +7,8 @@ class SortableHooks extends \Asgard\Hook\HooksContainer {
 	 */
 	public static function asgardActions($chain, $entity) {
 		if($entity->getDefinition()->hasBehavior('Asgard\Behaviors\SortableBehavior')) {
-			$alias = $chain->app->get('adminManager')->getAlias(get_class($entity));
-			echo '<a href="'.$chain->app->get('resolver')->url_for(array('Asgard\Behaviors\Controllers\SortableController', 'promote'), array('entityAlias'=>$alias, 'id' => $entity->id)).'">'.__('Promote').'</a> | <a href="'.$chain->app->get('resolver')->url_for(array('Asgard\Behaviors\Controllers\SortableController', 'demote'), array('entityAlias'=>$alias, 'id' => $entity->id)).'">'.__('Demote').'</a> | ';
+			$alias = $chain->container->get('adminManager')->getAlias(get_class($entity));
+			echo '<a href="'.$chain->container->get('resolver')->url_for(array('Asgard\Behaviors\Controllers\SortableController', 'promote'), array('entityAlias'=>$alias, 'id' => $entity->id)).'">'.__('Promote').'</a> | <a href="'.$chain->container->get('resolver')->url_for(array('Asgard\Behaviors\Controllers\SortableController', 'demote'), array('entityAlias'=>$alias, 'id' => $entity->id)).'">'.__('Demote').'</a> | ';
 		}
 	}
 }

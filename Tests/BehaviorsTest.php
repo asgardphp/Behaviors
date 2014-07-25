@@ -2,27 +2,27 @@
 namespace Asgard\Behaviors\Tests;
 
 class BehaviorsTest extends \PHPUnit_Framework_TestCase {
-	protected static $app;
+	protected static $container;
 
 	public static function setUpBeforeClass() {
-		static::$app = $app = new \Asgard\Container\Container;
-		$app['kernel'] = new \Asgard\Core\Kernel();
-		$app['config'] = new \Asgard\Config\Config;
-		$app['config']->set('locale', 'en');
-		$app['config']->set('locales', array('fr', 'en'));
-		$app['hooks'] = new \Asgard\Hook\HooksManager($app);
-		$app['cache'] = new \Asgard\Cache\NullCache;
-		$app['html'] = new \Asgard\Http\Utils\Html(new \Asgard\Http\Request);
-		$app['rulesregistry'] = new \Asgard\Validation\RulesRegistry;
-		$app['entitiesmanager'] = new \Asgard\Entity\EntitiesManager($app);
-		$app['db'] = new \Asgard\Db\DB(array(
+		static::$container = $container = new \Asgard\Container\Container;
+		$container['kernel'] = new \Asgard\Core\Kernel();
+		$container['config'] = new \Asgard\Config\Config;
+		$container['config']->set('locale', 'en');
+		$container['config']->set('locales', array('fr', 'en'));
+		$container['hooks'] = new \Asgard\Hook\HooksManager($container);
+		$container['cache'] = new \Asgard\Cache\NullCache;
+		$container['html'] = new \Asgard\Http\Utils\Html(new \Asgard\Http\Request);
+		$container['rulesregistry'] = new \Asgard\Validation\RulesRegistry;
+		$container['entitiesmanager'] = new \Asgard\Entity\EntitiesManager($container);
+		$container['db'] = new \Asgard\Db\DB(array(
 			'database' => 'asgard',
 			'user' => 'root',
 			'password' => '',
 			'host' => 'localhost'
 		));
-		\Asgard\Entity\Entity::setApp($app);
-		static::$app = $app;
+		\Asgard\Entity\Entity::setContainer($container);
+		static::$container = $container;
 
 		$db = new \Asgard\Db\DB(array(
 			'host' => 'localhost',
@@ -32,15 +32,15 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 		));
 		$schema = new \Asgard\Db\Schema($db);
 		$schema->dropAll();
-		$mm = new \Asgard\Orm\ORMMigrations($app);
+		$mm = new \Asgard\Orm\ORMMigrations($container);
 		$mm->autoMigrate('Asgard\Behaviors\Tests\Fixtures\News', new \Asgard\Db\Schema($db));
 		Fixtures\News::create(array('id'=>1, 'title'=>'a', 'content'=>'a', 'published'=>true));
 		Fixtures\News::create(array('id'=>2, 'title'=>'a', 'content'=>'a', 'published'=>true));
 		Fixtures\News::create(array('id'=>3, 'title'=>'a', 'content'=>'a', 'published'=>false));
 	}
 
-	protected static function getApp() {
-		return static::$app;
+	protected static function getContainer() {
+		return static::$container;
 	}
 	
 	#page
@@ -65,9 +65,9 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 
 		$news->showMetas();
 
-		$this->assertEquals('Test Meta Title', static::getApp()['html']->getTitle());
-		$this->assertEquals('Test Meta Description', static::getApp()['html']->getDescription());
-		$this->assertEquals('Test Meta Keywords', static::getApp()['html']->getKeywords());
+		$this->assertEquals('Test Meta Title', static::getContainer()['html']->getTitle());
+		$this->assertEquals('Test Meta Description', static::getContainer()['html']->getDescription());
+		$this->assertEquals('Test Meta Keywords', static::getContainer()['html']->getKeywords());
 	}
 
 	#slugify

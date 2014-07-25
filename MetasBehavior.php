@@ -10,9 +10,9 @@ class MetasBehavior extends \Asgard\Entity\Behavior {
 	}
 
 	public function call_showMetas(\Asgard\Entity\Entity $entity) {
-		$app = $this->getApp();
-		$app['html']->setTitle($entity->meta_title!='' ? html_entity_decode($entity->meta_title):html_entity_decode($entity));
-		$app['html']->setKeywords($entity->meta_keywords);
-		$app['html']->setDescription($entity->meta_description);
+		$container = $this->getContainer();
+		$container['html']->setTitle($entity->meta_title!='' ? html_entity_decode($entity->meta_title):html_entity_decode($entity));
+		$container['html']->setKeywords($entity->meta_keywords);
+		$container['html']->setDescription($entity->meta_description);
 	}
 }
