@@ -9,7 +9,7 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 		$container['config'] = new \Asgard\Config\Config;
 		$container['hooks'] = new \Asgard\Hook\HooksManager($container);
 		$container['cache'] = new \Asgard\Cache\NullCache;
-		$container['html'] = new \Asgard\Http\Utils\Html(new \Asgard\Http\Request);
+		$container['html'] = new \Asgard\Http\Utils\HTML(new \Asgard\Http\Request);
 		$container['rulesregistry'] = new \Asgard\Validation\RulesRegistry;
 		$container['entitiesmanager'] = new \Asgard\Entity\EntitiesManager($container);
 		$container['db'] = new \Asgard\Db\DB(array(
