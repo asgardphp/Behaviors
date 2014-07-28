@@ -7,9 +7,23 @@
 		"email": "michel@hognerud.net"
 	}],
 	"require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "asgard/entity": "@dev"
 	},
+    "require-dev": {
+        "nesbot/carbon": "1.*",
+        "asgard/http": "@dev",
+        "asgard/db": "@dev",
+        "asgard/orm": "@dev"
+    },
+    "suggest": {
+        "nesbot/carbon": "1.*",
+        "asgard/http": "@dev",
+        "asgard/db": "@dev",
+        "asgard/orm": "@dev"
+    },
     "autoload": {
         "psr-4": {"Asgard\\Behaviors\\": "."}
-    }
+    },
+    "minimum-stability": "dev"
 }
