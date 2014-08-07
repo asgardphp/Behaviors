@@ -9,7 +9,7 @@ class SortableBehavior extends \Asgard\Entity\Behavior {
 		$definition->hook('save', function($chain, $entity) {
 			if(!isset($entity->position)) {
 				try {
-					$entity->position = $entity::orderBy('position ASC')->first()->position + 1;
+					$entity->position = $entity::orderBy('position DESC')->first()->position + 1;
 				} catch(\Exception $e) {
 					$entity->position = 0;
 				}

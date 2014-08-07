@@ -39,12 +39,6 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 	protected static function getContainer() {
 		return static::$container;
 	}
-	
-	#page
-	public function testPage() {
-		$this->assertTrue(Fixtures\News::getDefinition()->hasBehavior('Asgard\Behaviors\MetasBehavior'));
-		$this->assertTrue(Fixtures\News::getDefinition()->hasBehavior('Asgard\Behaviors\SlugifyBehavior'));
-	}
 
 	#metas
 	public function testMetas() {
@@ -88,8 +82,10 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 			'title' => 'Test Title',
 			'content' => 'Test Content',
 		));
-		$this->assertEquals(date('d/m/Y H:i:s'), $news->created_at->format('d/m/Y H:i:s'));
-		$this->assertEquals(date('d/m/Y H:i:s'), $news->updated_at->format('d/m/Y H:i:s'));
+		$created_at = $news->created_at->format('U');
+		$updated_at = $news->updated_at->format('U');
+		$this->assertTrue($created_at == time() || $created_at == (time()-1));
+		$this->assertTrue($updated_at == time() || $updated_at == (time()-1));
 
 		$news = new Fixtures\News(array(
 			'title' => 'Test Title',

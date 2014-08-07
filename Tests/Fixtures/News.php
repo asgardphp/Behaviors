@@ -9,7 +9,7 @@ class News extends \Asgard\Entity\Entity {
 		);
 
 		$definition->behaviors = array(
-			new \Asgard\Behaviors\PageBehavior,
+			new \Asgard\Behaviors\MetasBehavior,
 			new \Asgard\Behaviors\SlugifyBehavior('title'),
 			new \Asgard\Behaviors\PublishBehavior,
 			new \Asgard\Behaviors\SortableBehavior,
