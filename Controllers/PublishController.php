@@ -19,11 +19,11 @@ class PublishController extends \Admin\Libs\Controller\AdminParentController {
 	 * @Route("publish")
 	 */
 	public function publishAction(\Asgard\Http\Request $request) {
-		$this->entity->save(array('published'=>!$this->entity->published));
+		$this->entity->save(['published'=>!$this->entity->published]);
 		if($this->entity->published)
-			\Asgard\Container\Container::get('flash')->addSuccess(__('Element published with success.'));
+			$this->getFlash()->addSuccess($this->container['translator']->trans('Element published with success.'));
 		else
-			\Asgard\Container\Container::get('flash')->addSuccess(__('Element unpublished with success.'));
+			$this->getFlash()->addSuccess($this->container['translator']->trans('Element unpublished with success.'));
 		return $this->response->back();
 	}
 }

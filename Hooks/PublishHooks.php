@@ -6,9 +6,11 @@ class PublishHooks extends \Asgard\Hook\HooksContainer {
 	 * @Hook("asgard_actions")
 	 */
 	public static function asgardActions(\Asgard\Hook\HookChain $chain, \Asgard\Entity\Entity $entity) {
+		$translator = $chain->container['translator'];
+
 		if($entity->getDefinition()->hasBehavior('Asgard\Behaviors\PublishBehavior')) {
-			$alias = \Asgard\Container\Container::get('adminManager')->getAlias(get_class($entity));
-			echo '<a href="'.\Asgard\Container\Container::get('url')->url_for(array('Asgard\Behaviors\Controllers\PublishController', 'publish'), array('entityAlias'=>$alias, 'id' => $entity->id)).'">'.($entity->published ? __('Unpublish'):__('Publish')).'</a> | ';
+			$alias = $chain->container['adminManager']->getAlias(get_class($entity));
+			echo '<a href="'.$chain->container['url']->url_for(['Asgard\Behaviors\Controllers\PublishController', 'publish'], ['entityAlias'=>$alias, 'id' => $entity->id]).'">'.($entity->published ? $translator->trans('Unpublish'):$translator->trans('Publish')).'</a> | ';
 		}
 	}
 
@@ -20,35 +22,37 @@ class PublishHooks extends \Asgard\Hook\HooksContainer {
 		if(!$entityClass::getDefinition()->hasBehavior('Asgard\Behaviors\PublishBehavior'))
 			return;
 
+		$translator = $chain->container['translator'];
+
 		#publish
-		$actions['publish'] = array(
-			'text'	=>	__('Publish'),
+		$actions['publish'] = [
+			'text'	=>	$translator->trans('Publish'),
 			'callback'	=>	function($entityClass, $controller) {
 				if($controller->request->post->size() > 1) {
 					foreach($controller->request->post->get('id') as $id) {
 						$entity = $entityClass::load($id);
 						if($entity)
-							$entity->save(array('published'=>1));
+							$entity->save(['published'=>1]);
 					}
 				
-					$controller->getFlash()->addSuccess(sprintf(__('%s element(s) published with success!'), count($controller->request->post->get('id'))));
+					$controller->getFlash()->addSuccess(sprintf($translator->trans('%s element(s) published with success!'), count($controller->request->post->get('id'))));
 				}
 			}
-		);
+		];
 		#unpublish
-		$actions['unpublish'] = array(
-			'text'	=>	__('Unpublish'),
+		$actions['unpublish'] = [
+			'text'	=>	$translator->trans('Unpublish'),
 			'callback'	=>	function($entityClass, $controller) {
 				if($controller->request->post->size() > 1) {
 					foreach($controller->request->post->get('id') as $id) {
 						$entity = $entityClass::load($id);
 						if($entity)
-							$entity->save(array('published'=>0));
+							$entity->save(['published'=>0]);
 					}
 				
-					$controller->getFlash()->addSuccess(sprintf(__('%s element(s) unpublished with success!'), count($controller->request->post->get('id'))));
+					$controller->getFlash()->addSuccess(sprintf($translator->trans('%s element(s) unpublished with success!'), count($controller->request->post->get('id'))));
 				}
 			}
-		);
+		];
 	}
 }

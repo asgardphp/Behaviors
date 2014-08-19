@@ -27,16 +27,16 @@ class SortableController extends \Admin\Libs\Controller\AdminParentController {
 		try {
 			$separate_by = $entity->getDefinition()->separate_by;
 			if($separate_by)
-				$over_entity = $entityClass::where(array('position < ?'=>$entity->position, $separate_by=>$entity->$separate_by))->orderBy('position DESC')->first();
+				$over_entity = $entityClass::where(['position < ?'=>$entity->position, $separate_by=>$entity->$separate_by])->orderBy('position DESC')->first();
 			else
-				$over_entity = $entityClass::where(array('position < ?'=>$entity->position))->orderBy('position DESC')->first();
+				$over_entity = $entityClass::where(['position < ?'=>$entity->position])->orderBy('position DESC')->first();
 			
 			$old = $entity->position;
 			$entity->position = $over_entity->position;
 			$over_entity->position = $old;
 			$entity->save(null, true);
 			$over_entity->save(null, true);
-			\Asgard\Container\Container::get('flash')->addSuccess(__('Order modified with success.'));
+			$this->getFlash()->addSuccess($this->container['translator']->trans('Order modified with success.'));
 		} catch(\Exception $e) {d($e);}
 
 		return $this->response->back();
@@ -53,16 +53,16 @@ class SortableController extends \Admin\Libs\Controller\AdminParentController {
 		try {
 			$separate_by = $entity->getDefinition()->separate_by;
 			if($separate_by)
-				$below_entity = $entityClass::where(array('position > ?'=>$entity->position, $separate_by=>$entity->$separate_by))->orderBy('position ASC')->first();
+				$below_entity = $entityClass::where(['position > ?'=>$entity->position, $separate_by=>$entity->$separate_by])->orderBy('position ASC')->first();
 			else
-				$below_entity = $entityClass::where(array('position > ?'=>$entity->position))->orderBy('position ASC')->first();
+				$below_entity = $entityClass::where(['position > ?'=>$entity->position])->orderBy('position ASC')->first();
 			
 			$old = $entity->position;
 			$entity->position = $below_entity->position;
 			$below_entity->position = $old;
 			$entity->save(null, true);
 			$below_entity->save(null, true);
-			\Asgard\Container\Container::get('flash')->addSuccess(__('Order modified with success.'));
+			$this->getFlash()->addSuccess($this->container['translator']->trans('Order modified with success.'));
 		} catch(\Exception $e) {}
 		
 		return $this->response->back();
