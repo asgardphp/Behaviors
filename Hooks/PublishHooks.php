@@ -19,7 +19,7 @@ class PublishHooks extends \Asgard\Hook\HooksContainer {
 	 */
 	public static function asgardadminGlobalactions(\Asgard\Hook\HookChain $chain, \Asgard\Http\Controller $controller, &$actions) {
 		$entityClass = $controller->getEntity();
-		if(!$entityClass::getDefinition()->hasBehavior('Asgard\Behaviors\PublishBehavior'))
+		if(!$entityClass::getStaticDefinition()->hasBehavior('Asgard\Behaviors\PublishBehavior'))
 			return;
 
 		$translator = $chain->container['translator'];
