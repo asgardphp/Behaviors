@@ -22,12 +22,15 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 			'password' => '',
 			'host' => 'localhost'
 		));
+		$container->register('orm', function($container, $entityClass, $locale, $prefix, $dataMapper) {
+			return new \Asgard\Orm\ORM($entityClass, $locale, $prefix, $dataMapper, $container->createFactory('paginator'));
+		});
 		$container->register('datamapper', function($container) {
 			return new \Asgard\Orm\DataMapper(
 				$container['db'],
 				'en',
 				'',
-				$container
+				$container->createFactory('orm')
 			);
 		});
 
