@@ -8,19 +8,19 @@
 	}],
 	"require": {
         "php": ">=5.4.0",
-        "asgard/entity": "v0.*"
+        "asgard/entity": "0.*"
 	},
     "require-dev": {
         "nesbot/carbon": "1.*",
-        "asgard/http": "v0.*",
-        "asgard/db": "v0.*",
-        "asgard/orm": "v0.*"
+        "asgard/http": "0.*",
+        "asgard/db": "0.*",
+        "asgard/orm": "0.*"
     },
     "suggest": {
         "nesbot/carbon": "1.*",
-        "asgard/http": "v0.*",
-        "asgard/db": "v0.*",
-        "asgard/orm": "v0.*"
+        "asgard/http": "0.*",
+        "asgard/db": "0.*",
+        "asgard/orm": "0.*"
     },
     "autoload": {
         "psr-4": {"Asgard\\Behaviors\\": "."}
