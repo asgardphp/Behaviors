@@ -10,7 +10,7 @@ class PublishHooks extends \Asgard\Hook\HooksContainer {
 
 		if($entity->getDefinition()->hasBehavior('Asgard\Behaviors\PublishBehavior')) {
 			$alias = $chain->container['adminManager']->getAlias(get_class($entity));
-			echo '<a href="'.$chain->container['url']->url_for(['Asgard\Behaviors\Controllers\PublishController', 'publish'], ['entityAlias'=>$alias, 'id' => $entity->id]).'">'.($entity->published ? $translator->trans('Unpublish'):$translator->trans('Publish')).'</a> | ';
+			echo '<a href="'.$chain->container['resolver']->url_for(['Asgard\Behaviors\Controllers\PublishController', 'publish'], ['entityAlias'=>$alias, 'id' => $entity->id]).'">'.($entity->published ? $translator->trans('Unpublish'):$translator->trans('Publish')).'</a> | ';
 		}
 	}
 
@@ -27,7 +27,7 @@ class PublishHooks extends \Asgard\Hook\HooksContainer {
 		#publish
 		$actions['publish'] = [
 			'text'	=>	$translator->trans('Publish'),
-			'callback'	=>	function($entityClass, $controller) {
+			'callback'	=>	function($entityClass, $controller) use($translator) {
 				if($controller->request->post->size() > 1) {
 					foreach($controller->request->post->get('id') as $id) {
 						$entity = $entityClass::load($id);
@@ -42,7 +42,7 @@ class PublishHooks extends \Asgard\Hook\HooksContainer {
 		#unpublish
 		$actions['unpublish'] = [
 			'text'	=>	$translator->trans('Unpublish'),
-			'callback'	=>	function($entityClass, $controller) {
+			'callback'	=>	function($entityClass, $controller) use($translator) {
 				if($controller->request->post->size() > 1) {
 					foreach($controller->request->post->get('id') as $id) {
 						$entity = $entityClass::load($id);
