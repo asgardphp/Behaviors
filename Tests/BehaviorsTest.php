@@ -25,19 +25,21 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 		$container->register('orm', function($container, $entityClass, $locale, $prefix, $dataMapper) {
 			return new \Asgard\Orm\ORM($entityClass, $locale, $prefix, $dataMapper, $container->createFactory('paginator'));
 		});
+
+		$entitiesManager = $container['entitiesmanager'] = new \Asgard\Entity\EntitiesManager($container);
+		$entitiesManager->setValidatorFactory($container->createFactory('validator'));
+		#set the EntitiesManager static instance for activerecord-like entities (e.g. new Article or Article::find())
+		\Asgard\Entity\EntitiesManager::setInstance($entitiesManager);
+
 		$container->register('datamapper', function($container) {
 			return new \Asgard\Orm\DataMapper(
+				$container['entitiesManager'],
 				$container['db'],
 				'en',
 				'',
 				$container->createFactory('orm')
 			);
 		});
-
-		$entitiesManager = $container['entitiesmanager'] = new \Asgard\Entity\EntitiesManager($container);
-		$entitiesManager->setValidatorFactory($container->createFactory('validator'));
-		#set the EntitiesManager static instance for activerecord-like entities (e.g. new Article or Article::find())
-		\Asgard\Entity\EntitiesManager::setInstance($entitiesManager);
 
 		static::$container = $container;
 
@@ -49,8 +51,8 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 		));
 		$schema = new \Asgard\Db\Schema($db);
 		$schema->dropAll();
-		$mm = new \Asgard\Orm\ORMMigrations($container);
-		$mm->autoMigrate('Asgard\Behaviors\Tests\Fixtures\News', new \Asgard\Db\Schema($db));
+		$mm = new \Asgard\Orm\ORMMigrations($container['dataMapper']);
+		$mm->doAutoMigrate($entitiesManager->get('Asgard\Behaviors\Tests\Fixtures\News'), new \Asgard\Db\Schema($db));
 		Fixtures\News::create(array('id'=>1, 'title'=>'a', 'content'=>'a', 'published'=>true));
 		Fixtures\News::create(array('id'=>2, 'title'=>'a', 'content'=>'a', 'published'=>true));
 		Fixtures\News::create(array('id'=>3, 'title'=>'a', 'content'=>'a', 'published'=>false));
