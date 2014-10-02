@@ -8,7 +8,7 @@ class SortableHooks extends \Asgard\Hook\HooksContainer {
 	public static function asgardActions($chain, $entity) {
 		if($entity->getDefinition()->hasBehavior('Asgard\Behaviors\SortableBehavior')) {
 			$alias = $chain->container['adminManager']->getAlias(get_class($entity));
-			echo '<a href="'.$chain->container['resolver']->url_for(['Asgard\Behaviors\Controllers\SortableController', 'promote'], ['entityAlias'=>$alias, 'id' => $entity->id]).'">'.__('Promote').'</a> | <a href="'.$chain->container['resolver']->url_for(['Asgard\Behaviors\Controllers\SortableController', 'demote'], ['entityAlias'=>$alias, 'id' => $entity->id]).'">'.__('Demote').'</a> | ';
+			echo '<a href="'.$chain->container['resolver']->url(['Asgard\Behaviors\Controllers\SortableController', 'promote'], ['entityAlias'=>$alias, 'id' => $entity->id]).'">'.__('Promote').'</a> | <a href="'.$chain->container['resolver']->url(['Asgard\Behaviors\Controllers\SortableController', 'demote'], ['entityAlias'=>$alias, 'id' => $entity->id]).'">'.__('Demote').'</a> | ';
 		}
 	}
 }

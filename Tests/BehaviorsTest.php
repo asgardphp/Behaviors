@@ -33,8 +33,8 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 
 		$container->register('datamapper', function($container) {
 			return new \Asgard\Orm\DataMapper(
-				$container['entitiesManager'],
 				$container['db'],
+				$container['entitiesManager'],
 				'en',
 				'',
 				$container->createFactory('orm')
@@ -52,7 +52,7 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 		$schema = new \Asgard\Db\Schema($db);
 		$schema->dropAll();
 		$mm = new \Asgard\Orm\ORMMigrations($container['dataMapper']);
-		$mm->doAutoMigrate($entitiesManager->get('Asgard\Behaviors\Tests\Fixtures\News'), new \Asgard\Db\Schema($db));
+		$mm->autoMigrate($entitiesManager->get('Asgard\Behaviors\Tests\Fixtures\News'), new \Asgard\Db\Schema($db));
 		Fixtures\News::create(array('id'=>1, 'title'=>'a', 'content'=>'a', 'published'=>true));
 		Fixtures\News::create(array('id'=>2, 'title'=>'a', 'content'=>'a', 'published'=>true));
 		Fixtures\News::create(array('id'=>3, 'title'=>'a', 'content'=>'a', 'published'=>false));

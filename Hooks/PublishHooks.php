@@ -10,7 +10,7 @@ class PublishHooks extends \Asgard\Hook\HooksContainer {
 
 		if($entity->getDefinition()->hasBehavior('Asgard\Behaviors\PublishBehavior')) {
 			$alias = $chain->container['adminManager']->getAlias(get_class($entity));
-			echo '<a href="'.$chain->container['resolver']->url_for(['Asgard\Behaviors\Controllers\PublishController', 'publish'], ['entityAlias'=>$alias, 'id' => $entity->id]).'">'.($entity->published ? $translator->trans('Unpublish'):$translator->trans('Publish')).'</a> | ';
+			echo '<a href="'.$chain->container['resolver']->url(['Asgard\Behaviors\Controllers\PublishController', 'publish'], ['entityAlias'=>$alias, 'id' => $entity->id]).'">'.($entity->published ? $translator->trans('Unpublish'):$translator->trans('Publish')).'</a> | ';
 		}
 	}
 
@@ -34,7 +34,7 @@ class PublishHooks extends \Asgard\Hook\HooksContainer {
 						if($entity)
 							$entity->save(['published'=>1]);
 					}
-				
+
 					$controller->getFlash()->addSuccess(sprintf($translator->trans('%s element(s) published with success!'), count($controller->request->post->get('id'))));
 				}
 			}
@@ -49,7 +49,7 @@ class PublishHooks extends \Asgard\Hook\HooksContainer {
 						if($entity)
 							$entity->save(['published'=>0]);
 					}
-				
+
 					$controller->getFlash()->addSuccess(sprintf($translator->trans('%s element(s) unpublished with success!'), count($controller->request->post->get('id'))));
 				}
 			}

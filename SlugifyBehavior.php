@@ -16,10 +16,10 @@ class SlugifyBehavior extends \Asgard\Entity\Behavior {
 		elseif(method_exists($entity, '__toString'))
 			return static::slugify($entity->__toString());
 	}
-	
+
 	protected static function slugify($text) {
 		$text = \Asgard\Common\Tools::removeAccents($text);
-	
+
 		#replace non letter or digits by -
 		$text = preg_replace('~[^\\pL\d]+~u', '-', $text);
 
