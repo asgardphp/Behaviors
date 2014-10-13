@@ -1,15 +1,15 @@
 {
-	"name": "asgard/behaviors",
-	"type": "asgard-bundle",
-	"license": "MIT",
-	"authors": [{
-		"name": "Michel Hognerud",
-		"email": "michel@hognerud.net"
-	}],
-	"require": {
+    "name": "asgard/behaviors",
+    "type": "asgard-bundle",
+    "license": "MIT",
+    "authors": [{
+        "name": "Michel Hognerud",
+        "email": "michel@hognerud.net"
+    }],
+    "require": {
         "php": ">=5.4.0",
         "asgard/entity": "0.*"
-	},
+    },
     "require-dev": {
         "nesbot/carbon": "1.*",
         "asgard/http": "0.*",
@@ -24,5 +24,11 @@
     },
     "autoload": {
         "psr-4": {"Asgard\\Behaviors\\": "."}
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.2-dev"
+        }
     }
 }

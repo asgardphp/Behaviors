@@ -10,12 +10,6 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 		$container['hooks'] = new \Asgard\Hook\HooksManager($container);
 		$container['cache'] = new \Asgard\Cache\NullCache;
 		$container['html'] = new \Asgard\Http\Utils\HTML(new \Asgard\Http\Request);
-		$container['rulesregistry'] = new \Asgard\Validation\RulesRegistry;
-		$container->register('validator', function($container) {
-			$validator = new \Asgard\Validation\Validator;
-			$validator->setRegistry($container['rulesregistry']);
-			return $validator;
-		});
 		$container['db'] = new \Asgard\Db\DB(array(
 			'database' => 'asgard',
 			'user' => 'root',
@@ -23,11 +17,11 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 			'host' => 'localhost'
 		));
 		$container->register('orm', function($container, $entityClass, $locale, $prefix, $dataMapper) {
-			return new \Asgard\Orm\ORM($entityClass, $locale, $prefix, $dataMapper, $container->createFactory('paginator'));
+			return new \Asgard\Orm\ORM($entityClass, $locale, $prefix, $dataMapper);
 		});
 
 		$entitiesManager = $container['entitiesmanager'] = new \Asgard\Entity\EntitiesManager($container);
-		$entitiesManager->setValidatorFactory($container->createFactory('validator'));
+		$entitiesManager->setValidatorFactory(new \Asgard\Validation\ValidatorFactory);
 		#set the EntitiesManager static instance for activerecord-like entities (e.g. new Article or Article::find())
 		\Asgard\Entity\EntitiesManager::setInstance($entitiesManager);
 
@@ -37,7 +31,7 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 				$container['entitiesManager'],
 				'en',
 				'',
-				$container->createFactory('orm')
+				new \Asgard\Orm\ORMFactory
 			);
 		});
 
