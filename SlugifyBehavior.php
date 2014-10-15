@@ -2,7 +2,7 @@
 namespace Asgard\Behaviors;
 
 class SlugifyBehavior extends \Asgard\Entity\Behavior {
-	public function load(\Asgard\Entity\EntityDefinition $definition) {
+	public function load(\Asgard\Entity\Definition $definition) {
 		$definition->addProperty('slug', array('type' => 'text', 'required' => false));
 	}
 

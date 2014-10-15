@@ -4,7 +4,7 @@ namespace Asgard\Behaviors;
 class PublishBehavior extends \Asgard\Entity\Behavior {
 	protected $entityClass;
 
-	public function load(\Asgard\Entity\EntityDefinition $definition) {
+	public function load(\Asgard\Entity\Definition $definition) {
 		$definition->addProperty('published', array('type'=>'boolean', 'default'=>true));
 		$this->entityClass = $definition->getClass();
 	}

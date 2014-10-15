@@ -1,11 +1,11 @@
 <?php
 namespace Asgard\Behaviors\Hooks;
 
-class PublishHooks extends \Asgard\Hook\HooksContainer {
+class PublishHooks extends \Asgard\Hook\HookContainer {
 	/**
 	 * @Hook("asgard_actions")
 	 */
-	public static function asgardActions(\Asgard\Hook\HookChain $chain, \Asgard\Entity\Entity $entity) {
+	public static function asgardActions(\Asgard\Hook\Chain $chain, \Asgard\Entity\Entity $entity) {
 		$translator = $chain->container['translator'];
 
 		if($entity->getDefinition()->hasBehavior('Asgard\Behaviors\PublishBehavior')) {
@@ -17,7 +17,7 @@ class PublishHooks extends \Asgard\Hook\HooksContainer {
 	/**
 	 * @Hook("asgardadmin_globalactions")
 	 */
-	public static function asgardadminGlobalactions(\Asgard\Hook\HookChain $chain, \Asgard\Http\Controller $controller, &$actions) {
+	public static function asgardadminGlobalactions(\Asgard\Hook\Chain $chain, \Asgard\Http\Controller $controller, &$actions) {
 		$entityClass = $controller->getEntity();
 		if(!$entityClass::getStaticDefinition()->hasBehavior('Asgard\Behaviors\PublishBehavior'))
 			return;

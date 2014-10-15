@@ -1,7 +1,7 @@
 <?php
 namespace Asgard\Behaviors\Hooks;
 
-class SortableHooks extends \Asgard\Hook\HooksContainer {
+class SortableHooks extends \Asgard\Hook\HookContainer {
 	/**
 	 * @Hook("asgard_actions")
 	 */

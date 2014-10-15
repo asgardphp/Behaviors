@@ -2,7 +2,7 @@
 namespace Asgard\Behaviors;
 
 class SortableBehavior extends \Asgard\Entity\Behavior {
-	public function load(\Asgard\Entity\EntityDefinition $definition) {
+	public function load(\Asgard\Entity\Definition $definition) {
 		$definition->order_by = 'position ASC';
 		$definition->addProperty('position', array('type' => 'integer', 'default'=>0, 'required' => false, 'editable' => false));
 

@@ -2,7 +2,7 @@
 namespace Asgard\Behaviors;
 
 class MetasBehavior extends \Asgard\Entity\Behavior {
-	public function load(\Asgard\Entity\EntityDefinition $definition) {
+	public function load(\Asgard\Entity\Definition $definition) {
 		$definition->addProperty('meta_title', array('type' => 'text', 'required' => false));
 		$definition->addProperty('meta_description', array('type' => 'text', 'required' => false));
 		$definition->addProperty('meta_keywords', array('type' => 'text', 'required' => false));

@@ -2,7 +2,7 @@
 namespace Asgard\Behaviors;
 
 class TimestampsBehavior extends \Asgard\Entity\Behavior {
-	public function load(\Asgard\Entity\EntityDefinition $definition) {
+	public function load(\Asgard\Entity\Definition $definition) {
 		$definition->addProperty('created_at', array('type' => 'datetime', 'required' => false, 'editable' => false, 'default' => function() { return \Asgard\Common\Datetime::now(); }));
 		$definition->addProperty('updated_at', array('type' => 'datetime', 'required' => false, 'editable' => false, 'default' => function() { return \Asgard\Common\Datetime::now(); }));
 

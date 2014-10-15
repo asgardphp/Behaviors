@@ -6,7 +6,7 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 
 	public static function setUpBeforeClass() {
 		$container = new \Asgard\Container\Container;
-		$container['hooks'] = new \Asgard\Hook\HooksManager($container);
+		$container['hooks'] = new \Asgard\Hook\HookManager($container);
 		$container['html'] = new \Asgard\Http\Utils\HTML(new \Asgard\Http\Request);
 		$container['db'] = new \Asgard\Db\DB(array(
 			'database' => 'asgard',
@@ -18,15 +18,15 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 			return new \Asgard\Orm\ORM($entityClass, $locale, $prefix, $dataMapper);
 		});
 
-		$entitiesManager = $container['entitiesmanager'] = new \Asgard\Entity\EntitiesManager($container);
-		$entitiesManager->setValidatorFactory(new \Asgard\Validation\ValidatorFactory);
-		#set the EntitiesManager static instance for activerecord-like entities (e.g. new Article or Article::find())
-		\Asgard\Entity\EntitiesManager::setInstance($entitiesManager);
+		$entityManager = $container['entityManager'] = new \Asgard\Entity\EntityManager($container);
+		$entityManager->setValidatorFactory(new \Asgard\Validation\ValidatorFactory);
+		#set the EntityManager static instance for activerecord-like entities (e.g. new Article or Article::find())
+		\Asgard\Entity\EntityManager::setInstance($entityManager);
 
 		$container->register('datamapper', function($container) {
 			return new \Asgard\Orm\DataMapper(
 				$container['db'],
-				$container['entitiesManager'],
+				$container['entityManager'],
 				'en',
 				'',
 				new \Asgard\Orm\ORMFactory
@@ -44,7 +44,7 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 		$schema = new \Asgard\Db\Schema($db);
 		$schema->dropAll();
 		$mm = new \Asgard\Orm\ORMMigrations($container['dataMapper']);
-		$mm->autoMigrate($entitiesManager->get('Asgard\Behaviors\Tests\Fixtures\News'), new \Asgard\Db\Schema($db));
+		$mm->autoMigrate($entityManager->get('Asgard\Behaviors\Tests\Fixtures\News'), new \Asgard\Db\Schema($db));
 		Fixtures\News::create(array('id'=>1, 'title'=>'a', 'content'=>'a', 'published'=>true));
 		Fixtures\News::create(array('id'=>2, 'title'=>'a', 'content'=>'a', 'published'=>true));
 		Fixtures\News::create(array('id'=>3, 'title'=>'a', 'content'=>'a', 'published'=>false));
