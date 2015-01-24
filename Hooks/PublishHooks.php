@@ -6,11 +6,11 @@ class PublishHooks extends \Asgard\Hook\HookContainer {
 	 * @Hook("asgard_actions")
 	 */
 	public static function asgardActions(\Asgard\Hook\Chain $chain, \Asgard\Entity\Entity $entity) {
-		$translator = $chain->container['translator'];
+		$translator = $chain->getContainer()['translator'];
 
 		if($entity->getDefinition()->hasBehavior('Asgard\Behaviors\PublishBehavior')) {
-			$alias = $chain->container['adminManager']->getAlias(get_class($entity));
-			echo '<a href="'.$chain->container['resolver']->url(['Asgard\Behaviors\Controllers\PublishController', 'publish'], ['entityAlias'=>$alias, 'id' => $entity->id]).'">'.($entity->published ? $translator->trans('Unpublish'):$translator->trans('Publish')).'</a> | ';
+			$alias = $chain->getContainer()['adminManager']->getAlias(get_class($entity));
+			echo '<a href="'.$chain->getContainer()['resolver']->url(['Asgard\Behaviors\Controllers\PublishController', 'publish'], ['entityAlias'=>$alias, 'id' => $entity->id]).'">'.($entity->published ? $translator->trans('Unpublish'):$translator->trans('Publish')).'</a> | ';
 		}
 	}
 
@@ -22,7 +22,7 @@ class PublishHooks extends \Asgard\Hook\HookContainer {
 		if(!$entityClass::getStaticDefinition()->hasBehavior('Asgard\Behaviors\PublishBehavior'))
 			return;
 
-		$translator = $chain->container['translator'];
+		$translator = $chain->getContainer()['translator'];
 
 		#publish
 		$actions['publish'] = [
