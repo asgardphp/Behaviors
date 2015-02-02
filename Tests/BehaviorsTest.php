@@ -8,12 +8,10 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 		$container = new \Asgard\Container\Container;
 		$container['hooks'] = new \Asgard\Hook\HookManager($container);
 		$container['html'] = new \Asgard\Http\Utils\HTML(new \Asgard\Http\Request);
-		$container['db'] = new \Asgard\Db\DB(array(
-			'database' => 'asgard',
-			'user' => 'root',
-			'password' => '',
-			'host' => 'localhost'
-		));
+		$container['db'] = new \Asgard\Db\DB([
+			'driver' => 'sqlite',
+			'database' => ':memory:',
+		]);
 		$container->register('orm', function($container, $entityClass, $locale, $prefix, $dataMapper) {
 			return new \Asgard\Orm\ORM($entityClass, $locale, $prefix, $dataMapper);
 		});
@@ -35,12 +33,10 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 
 		static::$container = $container;
 
-		$db = new \Asgard\Db\DB(array(
-			'host' => 'localhost',
-			'user' => 'root',
-			'password' => '',
-			'database' => 'asgard',
-		));
+		$db = new \Asgard\Db\DB([
+			'driver' => 'sqlite',
+			'database' => ':memory:',
+		]);
 		$schema = new \Asgard\Db\Schema($db);
 		$schema->dropAll();
 		$mm = new \Asgard\Orm\ORMMigrations($container['dataMapper']);
