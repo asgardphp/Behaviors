@@ -11,7 +11,7 @@ class SlugifyBehavior extends \Asgard\Entity\Behavior {
 
 		if($entity->slug)
 			return $entity->slug;
-		if($slug_from !== null && $entity->hasProperty($slug_from))
+		if($slug_from !== null && $entity->getDefinition()->hasProperty($slug_from))
 			return static::slugify($entity->get($slug_from));
 		elseif(method_exists($entity, '__toString'))
 			return static::slugify($entity->__toString());

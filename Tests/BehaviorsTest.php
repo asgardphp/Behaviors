@@ -7,7 +7,9 @@ class BehaviorsTest extends \PHPUnit_Framework_TestCase {
 	public static function setUpBeforeClass() {
 		$container = new \Asgard\Container\Container;
 		$container['hooks'] = new \Asgard\Hook\HookManager($container);
-		$container['html'] = new \Asgard\Http\Utils\HTML(new \Asgard\Http\Request);
+		$httpKernel = new \Asgard\Http\HttpKernel;
+		$httpKernel->addRequest(new \Asgard\Http\Request);
+		$container['html'] = new \Asgard\Http\Utils\HTML($httpKernel);
 		$container['db'] = new \Asgard\Db\DB([
 			'driver' => 'sqlite',
 			'database' => ':memory:',
