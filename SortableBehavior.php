@@ -13,15 +13,11 @@ class SortableBehavior extends \Asgard\Entity\Behavior {
 		$definition->addProperty('position', ['type' => 'decimal', 'precision'=>10, 'default'=>0, 'required' => false, 'editable' => false]);
 
 		$definition->hook('save', function($chain, $entity) {
-			if(!isset($entity->position)) {
-				try {
-					$orm = $entity::orderBy('position DESC');
-					if($this->category)
-						$orm->where($this->category, $entity->get($this->category));
-					$entity->position = $orm->first()->position + 1;
-				} catch(\Exception $e) {
-					$entity->position = 0;
-				}
+			if($entity->isNew()) {
+				$orm = $entity::orderBy('position DESC');
+				$f = $orm->first();
+				if($f)
+					$entity->position = $f->position + 1;
 			}
 		});
 	}
