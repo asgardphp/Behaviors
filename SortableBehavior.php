@@ -2,7 +2,7 @@
 namespace Asgard\Behaviors;
 
 class SortableBehavior extends \Asgard\Entity\Behavior {
-	protected $category;
+	public $category;
 
 	public function __construct($category=null) {
 		$this->category = $category;
