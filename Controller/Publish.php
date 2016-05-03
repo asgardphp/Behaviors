@@ -1,10 +1,10 @@
 <?php
-namespace Asgard\Behaviors\Controllers;
+namespace Asgard\Behaviors\Controller;
 
 /**
  * @Prefix("admin/sortable/:entityAlias/:id")
  */
-class PublishController extends \Admin\Libs\Controller\AdminParentController {
+class Publish extends \Admin\Libs\Controller\AdminParentController {
 	public function before(\Asgard\Http\Request $request) {
 		$this->layout = false;
 		$entityAlias = $request['entityAlias'];

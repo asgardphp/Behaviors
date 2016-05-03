@@ -1,10 +1,10 @@
 <?php
-namespace Asgard\Behaviors\Controllers;
+namespace Asgard\Behaviors\Controller;
 
 /**
  * @Prefix("admin/sortable/:entityAlias/:id")
  */
-class SortableController extends \Admin\Libs\Controller\AdminParentController {
+class Sortable extends \Admin\Libs\Controller\AdminParentController {
 	public function before(\Asgard\Http\Request $request) {
 		$datamapper = $this->container['datamapper'];
 		$this->set('layout', false);
