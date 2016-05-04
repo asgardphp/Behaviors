@@ -10,7 +10,7 @@ class Publish extends \Asgard\Hook\HookContainer {
 
 		if($entity->getDefinition()->hasBehavior('Asgard\Behaviors\PublishBehavior')) {
 			$alias = $chain->getContainer()['adminManager']->getAlias(get_class($entity));
-			echo '<a href="'.$chain->getContainer()['resolver']->url(['Asgard\Behaviors\Controllers\PublishController', 'publish'], ['entityAlias'=>$alias, 'id' => $entity->id]).'">'.($entity->published ? $translator->trans('Unpublish'):$translator->trans('Publish')).'</a> | ';
+			echo '<a href="'.$chain->getContainer()['resolver']->url(['Asgard\Behaviors\Controller\Publish', 'publish'], ['entityAlias'=>$alias, 'id' => $entity->id]).'">'.($entity->published ? $translator->trans('Unpublish'):$translator->trans('Publish')).'</a> | ';
 		}
 	}
 
