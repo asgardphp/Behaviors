@@ -7,28 +7,27 @@
         "email": "michel@hognerud.net"
     }],
     "require": {
-        "php": ">=5.4.0",
-        "asgard/entity": "0.*"
+        "php": ">=5.5.9",
+        "asgard/entity": "~0.3.0"
     },
     "require-dev": {
-        "nesbot/carbon": "1.*",
-        "asgard/http": "0.*",
-        "asgard/db": "0.*",
-        "asgard/orm": "0.*"
+        "nesbot/carbon": "^1.0",
+        "asgard/http": "~0.3.0",
+        "asgard/db": "~0.3.0",
+        "asgard/orm": "~0.3.0"
     },
     "suggest": {
-        "nesbot/carbon": "1.*",
-        "asgard/http": "0.*",
-        "asgard/db": "0.*",
-        "asgard/orm": "0.*"
+        "nesbot/carbon": "^1.0",
+        "asgard/http": "~0.3.0",
+        "asgard/db": "~0.3.0",
+        "asgard/orm": "~0.3.0"
     },
     "autoload": {
         "psr-4": {"Asgard\\Behaviors\\": "."}
     },
-    "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "0.2-dev"
+            "dev-master": "0.3-dev"
         }
     }
 }
